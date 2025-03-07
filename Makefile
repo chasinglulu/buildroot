@@ -603,7 +603,11 @@ prepare-sdk: world
 	mkdir -p $(HOST_DIR)/share/buildroot
 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
 
-BR2_SDK_PREFIX ?= $(GNU_TARGET_NAME)_sdk-buildroot
+BR2_SDK_PREFIX := $(subst ",,$(strip $(BR2_SDK_PREFIX))
+ifeq ($(BR2_SDK_PREFIX),)
+BR2_SDK_PREFIX = $(GNU_TARGET_NAME)_sdk-buildroot
+endif
+
 .PHONY: sdk
 sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
 	@$(call MESSAGE,"Generating SDK tarball")

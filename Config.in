@@ -195,6 +195,13 @@ config BR2_DEFCONFIG
 	  When running 'make savedefconfig', the defconfig file will be
 	  saved in this location.
 
+config BR2_SDK_PREFIX
+	string "SDK name prefix"
+	help
+	  If set, this string will be prepended to the SDK archive
+	  filename suffix. This is useful for building multiple SDKs from
+	  the same Buildroot configuration.
+
 config BR2_DL_DIR
 	string "Download dir"
 	default "$(TOPDIR)/dl"
