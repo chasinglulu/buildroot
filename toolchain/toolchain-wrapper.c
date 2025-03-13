@@ -306,6 +306,42 @@ int main(int argc, char **argv)
 #else
 	ret = snprintf(path, sizeof(path), "%s/bin/%s" BR_CROSS_PATH_SUFFIX, absbasedir, basename);
 #endif
+
+	// Check if path/to/toolchains exists
+	if (access(path, X_OK) != 0) {
+		char *env_path = getenv("PATH");
+		if (debug > 0)
+			fprintf(stderr, "env_path: %s\n", env_path);
+		if (env_path) {
+			char *token = strtok(env_path, ":");
+			while (token != NULL) {
+				char full_path[PATH_MAX];
+				snprintf(full_path, sizeof(full_path), "%s/%s", token, basename);
+				if (access(full_path, X_OK) == 0) {
+					strncpy(path, full_path, sizeof(path) - 1);
+					path[sizeof(path) - 1] = '\0';
+					break;
+				}
+				token = strtok(NULL, ":");
+			}
+		}
+	}
+
+	if (debug > 0) {
+		fprintf(stderr, "Toolchain wrapper path:");
+		fprintf(stderr, "    absbasedir: %s\n", absbasedir);
+		fprintf(stderr, "    relbasedir: %s\n", relbasedir);
+		fprintf(stderr, "    basename: %s\n", basename);
+#ifdef BR_CROSS_PATH_REL
+		fprintf(stderr, "    BR_CROSS_PATH_REL: %s\n", BR_CROSS_PATH_REL);
+#endif
+#ifdef BR_CROSS_PATH_ABS
+		fprintf(stderr, "    BR_CROSS_PATH_ABS: %s\n", BR_CROSS_PATH_ABS);
+#endif
+		fprintf(stderr, "    BR_CROSS_PATH_SUFFIX: %s\n", BR_CROSS_PATH_SUFFIX);
+		fprintf(stderr, "    path: %s\n", path);
+	}
+
 	if (ret >= sizeof(path)) {
 		perror(__FILE__ ": overflow");
 		return 3;
