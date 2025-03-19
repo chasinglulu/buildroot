@@ -1,0 +1,10 @@
+ACTION=="remove", GOTO="mmc_end"
+
+SUBSYSTEM!="block", GOTO="mmc_end"
+KERNEL!="mmcblk*[0-9]p[0-9]", GOTO="mmc_end"
+
+KERNEL=="mmcblk[0-9]p[0-9]", ENV{DEVTYPE}=="partition", IMPORT{builtin}="blkid"
+ENV{ID_PART_ENTRY_UUID}=="?*", SYMLINK+="disk/by-partuuid/$env{ID_PART_ENTRY_UUID}"
+ENV{ID_PART_ENTRY_SCHEME}=="gpt", ENV{ID_PART_ENTRY_NAME}=="?*", SYMLINK+="disk/by-partlabel/$env{ID_PART_ENTRY_NAME}"
+
+LABEL="mmc_end"
