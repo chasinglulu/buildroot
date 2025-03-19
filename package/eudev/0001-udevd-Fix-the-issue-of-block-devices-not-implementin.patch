@@ -1,0 +1,42 @@
+From cc31ab04faf0722646a3d4b9d289470042309a78 Mon Sep 17 00:00:00 2001
+From: chasinglulu <wangkart@aliyun.com>
+Date: Wed, 19 Mar 2025 10:59:16 +0800
+Subject: [PATCH] udevd: Fix the issue of block devices not implementing flock
+ function
+
+---
+ src/udev/udevd.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/src/udev/udevd.c b/src/udev/udevd.c
+index 2acf629f2..6c427c351 100644
+--- a/src/udev/udevd.c
++++ b/src/udev/udevd.c
+@@ -318,11 +318,24 @@ static void worker_spawn(struct event *event) {
+                             !startswith(udev_device_get_sysname(dev), "dm-") &&
+                             !startswith(udev_device_get_sysname(dev), "md")) {
+                                 struct udev_device *d = dev;
++                                bool is_block = false;
+ 
+                                 if (streq_ptr("partition", udev_device_get_devtype(d)))
+                                         d = udev_device_get_parent(d);
+ 
+                                 if (d) {
++                                    struct stat statbuf;
++                                    const char *devnode = udev_device_get_devnode(d);
++
++                                    if (stat(devnode, &statbuf) == 0 && S_ISBLK(statbuf.st_mode)) {
++                                        log_debug("%s is a block device", devnode);
++                                        is_block = true;
++                                    } else {
++                                        log_debug("%s is not a block device", devnode);
++                                    }
++                                }
++
++                                if (d && !is_block) {
+                                         fd_lock = open(udev_device_get_devnode(d), O_RDONLY|O_CLOEXEC|O_NOFOLLOW|O_NONBLOCK);
+                                         if (fd_lock >= 0 && flock(fd_lock, LOCK_SH|LOCK_NB) < 0) {
+                                                 log_debug_errno(errno, "Unable to flock(%s), skipping event handling: %m", udev_device_get_devnode(d));
+-- 
+2.25.1
+
