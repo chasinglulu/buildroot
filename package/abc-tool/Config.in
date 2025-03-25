@@ -1,0 +1,4 @@
+config BR2_PACKAGE_ABC_TOOL
+	bool "A/B metadata manage tool"
+	help
+		Say yes to include abc_tool.
