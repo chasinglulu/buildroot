@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# This script is used by busybox
+#
+# Copyright (C) 2025 Charleye <wangkart@aliyun.com>
+#
+
+
+start() {
+	echo "Loading all kernel modules ..."
+
+	if [ ! -f /usr/bin/load_modules.sh ]; then
+		echo "load_modules.sh not found, skipping module loading."
+	else
+		sh /usr/bin/load_modules.sh
+	fi
+
+	return 0
+}
+
+case "$1" in
+	start)
+		start ;;
+	stop)
+		:;;
+	*)
+		echo "Usage: $0 {start|stop}"
+		exit 1
+esac

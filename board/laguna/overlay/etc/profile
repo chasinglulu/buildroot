@@ -1,0 +1,29 @@
+
+export PATH="/usr/bin:/usr/sbin:/usr/local/sbin:/usr/local/bin"
+
+if [ "$PS1" ]; then
+	if [ "`id -u`" -eq 0 ]; then
+		export PS1='# '
+	else
+		export PS1='$ '
+	fi
+	if [ -f /etc/bash.bashrc ]; then
+		. /etc/bash.bashrc
+	fi
+fi
+
+if [ -f /bin/vim ]; then
+	export EDITOR='/bin/vim'
+else
+	export EDITOR='/bin/vi'
+fi
+
+# Source configuration files from /etc/profile.d
+if [ -d /etc/profile.d ]; then
+	for i in /etc/profile.d/*.sh; do
+	if [ -r $i ]; then
+		. $i
+	fi
+	done
+	unset i
+fi
