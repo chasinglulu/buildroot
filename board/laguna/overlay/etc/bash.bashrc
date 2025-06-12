@@ -24,9 +24,17 @@ if [ -x /usr/bin/dircolors ]; then
 	alias egrep='egrep --color=auto'
 fi
 
-export PATH=$PATH:/opt/msp/bin
+if [ -x /usr/bin/resize ]; then
+	# enable resizable terminal support
+	if [ -z "$TMOUT" ]; then
+		export TMOUT=0
+	fi
+	eval "$(resize)"
+fi
+
+export PATH=$PATH:/opt/bin
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-export LD_LIBRARY_PATH=/opt/msp/lib
+export LD_LIBRARY_PATH=/opt/lib
