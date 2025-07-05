@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-LSHW_VERSION = d76afbaaf40e953243da921844cddff8185324f3
-LSHW_SITE = $(call github,lyonel,lshw,$(LSHW_VERSION))
+LSHW_VERSION = 02.20
+LSHW_SITE = $(call github,lyonel,lshw,B.$(LSHW_VERSION))
 LSHW_LICENSE = GPL-2.0
 LSHW_LICENSE_FILES = COPYING
 
@@ -21,6 +21,20 @@ LSHW_MAKE_OPTS = \
 LSHW_MAKE_ENV = \
 	$(TARGET_MAKE_ENV) \
 	LIBS=$(TARGET_NLS_LIBS)
+
+ifeq ($(BR2_PACKAGE_SQLITE),y)
+LSHW_DEPENDENCIES += host-pkgconf sqlite
+LSHW_MAKE_OPTS += SQLITE=1
+else
+LSHW_MAKE_OPTS += SQLITE=0
+endif
+
+ifeq ($(BR2_PACKAGE_ZLIB),y)
+LSHW_DEPENDENCIES += host-pkgconf zlib
+LSHW_MAKE_OPTS += ZLIB=1
+else
+LSHW_MAKE_OPTS += ZLIB=0
+endif
 
 define LSHW_BUILD_CMDS
 	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src \
