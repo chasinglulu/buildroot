@@ -1,4 +1,4 @@
-From ab8b54cfc9d3fddba297c343a2d8dea9dbe20017 Mon Sep 17 00:00:00 2001
+From 447cc79175c327726184b459dde0acd92adeabaf Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
 Date: Tue, 4 Aug 2015 22:13:20 +0200
 Subject: [PATCH] drop configh from tools
@@ -23,7 +23,7 @@ Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
  1 file changed, 11 deletions(-)
 
 diff --git a/tools/env/fw_env_private.h b/tools/env/fw_env_private.h
-index 86be16d..3c62ac4 100644
+index 86be16dabc6..3c62ac44a03 100644
 --- a/tools/env/fw_env_private.h
 +++ b/tools/env/fw_env_private.h
 @@ -4,17 +4,6 @@
@@ -45,5 +45,5 @@ index 86be16d..3c62ac4 100644
   * To build the utility with the static configuration
   * comment out the next line.
 -- 
-2.9.4
+2.25.1
 

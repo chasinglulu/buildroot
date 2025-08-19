@@ -1,0 +1,43 @@
+From c48222dd70f00e74de3f48a733e84dc07471330f Mon Sep 17 00:00:00 2001
+From: chasinglulu <wangkartx@gmail.com>
+Date: Wed, 25 Oct 2023 10:40:11 +0800
+Subject: [PATCH] tools: mkimage: handle 64-bit address
+
+---
+ tools/fit_image.c | 4 ++--
+ tools/imagetool.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/fit_image.c b/tools/fit_image.c
+index 979f2411ee0..83bcc855736 100644
+--- a/tools/fit_image.c
++++ b/tools/fit_image.c
+@@ -259,8 +259,8 @@ static int fit_write_images(struct image_tool_params *params, char *fdt)
+ 			    genimg_get_os_short_name(params->os));
+ 	fdt_property_string(fdt, FIT_COMP_PROP,
+ 			    genimg_get_comp_short_name(params->comp));
+-	fdt_property_u32(fdt, FIT_LOAD_PROP, params->addr);
+-	fdt_property_u32(fdt, FIT_ENTRY_PROP, params->ep);
++	fdt_property_u64(fdt, FIT_LOAD_PROP, params->addr);
++	fdt_property_u64(fdt, FIT_ENTRY_PROP, params->ep);
+ 
+ 	/*
+ 	 * Put data last since it is large. SPL may only load the first part
+diff --git a/tools/imagetool.h b/tools/imagetool.h
+index ca7c2e48ba9..32efa3384f0 100644
+--- a/tools/imagetool.h
++++ b/tools/imagetool.h
+@@ -60,8 +60,8 @@ struct image_tool_params {
+ 	int type;
+ 	int comp;
+ 	char *dtc;
+-	unsigned int addr;
+-	unsigned int ep;
++	unsigned long addr;
++	unsigned long ep;
+ 	char *imagename;
+ 	char *imagename2;
+ 	char *datafile;
+-- 
+2.25.1
+

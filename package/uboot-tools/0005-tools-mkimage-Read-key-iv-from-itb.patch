@@ -1,0 +1,39 @@
+From ff5765625e9c8f9ba1ccc601a41fe6c5f20e0dcd Mon Sep 17 00:00:00 2001
+From: chasinglulu <wangkartx@gmail.com>
+Date: Tue, 11 Mar 2025 20:10:29 +0800
+Subject: [PATCH] tools: mkimage: Read key iv from itb
+
+---
+ tools/image-host.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/tools/image-host.c b/tools/image-host.c
+index 698adfb3e1d..ea62be4dd60 100644
+--- a/tools/image-host.c
++++ b/tools/image-host.c
+@@ -372,6 +372,8 @@ static int fit_image_setup_cipher(struct image_cipher_info *info,
+ 				  int noffset)
+ {
+ 	char *algo_name;
++	const void *iv;
++	int ivlen;
+ 	char filename[128];
+ 	int ret = -1;
+ 
+@@ -430,6 +432,13 @@ static int fit_image_setup_cipher(struct image_cipher_info *info,
+ 		goto out;
+ 	}
+ 
++	iv = fdt_getprop(fit, noffset, "iv", &ivlen);
++	if (iv) {
++		memcpy((void *)info->iv, iv, ivlen);
++		ret = 0;
++		goto out;
++	}
++
+ 	if (info->ivname) {
+ 		/* Read the IV in the file */
+ 		snprintf(filename, sizeof(filename), "%s/%s%s",
+-- 
+2.25.1
+

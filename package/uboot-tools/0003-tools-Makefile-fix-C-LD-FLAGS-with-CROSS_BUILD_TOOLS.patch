@@ -1,4 +1,4 @@
-From 3b89170333ef0fdfffee14751ce3e1d66d7dfa00 Mon Sep 17 00:00:00 2001
+From 31ead764ac3d4f83a39f4cb93de3bf1bdb0e0112 Mon Sep 17 00:00:00 2001
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Date: Tue, 14 Sep 2021 19:08:02 +0200
 Subject: [PATCH] tools/Makefile: fix {C,LD}FLAGS with CROSS_BUILD_TOOLS
@@ -16,10 +16,10 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/Makefile b/tools/Makefile
-index 4a86321f64..98bb92990d 100644
+index 3626919633a..64e7d214098 100644
 --- a/tools/Makefile
 +++ b/tools/Makefile
-@@ -316,7 +316,8 @@ subdir- += env
+@@ -329,7 +329,8 @@ subdir- += env
  
  ifneq ($(CROSS_BUILD_TOOLS),)
  override HOSTCC = $(CC)
@@ -30,5 +30,5 @@ index 4a86321f64..98bb92990d 100644
  quiet_cmd_crosstools_strip = STRIP   $^
        cmd_crosstools_strip = $(STRIP) $^; touch $@
 -- 
-2.33.0
+2.25.1
 

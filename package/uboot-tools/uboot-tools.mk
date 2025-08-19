@@ -4,9 +4,9 @@
 #
 ################################################################################
 
-UBOOT_TOOLS_VERSION = 2021.07
-UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
-UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+UBOOT_TOOLS_VERSION = 2022.10
+UBOOT_TOOLS_SOURCE = v$(UBOOT_TOOLS_VERSION).tar.gz
+UBOOT_TOOLS_SITE = https://github.com/u-boot/u-boot/archive/refs/tags
 UBOOT_TOOLS_LICENSE = GPL-2.0+
 UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
 UBOOT_TOOLS_CPE_ID_VENDOR = denx
@@ -22,7 +22,36 @@ define UBOOT_TOOLS_CONFIGURE_CMDS
 	touch $(@D)/include/config/auto.conf
 	mkdir -p $(@D)/include/generated
 	touch $(@D)/include/generated/autoconf.h
-	echo $(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),'#define CONFIG_FIT_PRINT 1') >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_MD5 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_MD5 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_SHA1 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_SHA1 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_FIT_FULL_CHECK 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_FIT_FULL_CHECK 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_CRC32 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_CRC32 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_SHA256 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_SHA256 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_FIT_PRINT 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_FIT_PRINT 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_FIT 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_FIT 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_FIT_RSASSA_PSS 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_FIT_RSASSA_PSS 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_FIT_SIGNATURE_MAX_SIZE 0x10000000" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_FIT_SIGNATURE_MAX_SIZE 0x10000000" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_FIT_VERBOSE 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_FIT_VERBOSE 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_FIT_SIGNATURE 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_FIT_SIGNATURE 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_LIBCRYPTO 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_LIBCRYPTO 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_OF_LIBFDT 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_OF_LIBFDT 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_SHA384 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_SHA384 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_TOOLS_SHA512 1" >> $(@D)/include/generated/autoconf.h
+	echo "#define CONFIG_SHA512 1" >> $(@D)/include/generated/autoconf.h
 	mkdir -p $(@D)/include/asm
 	touch $(@D)/include/asm/linkage.h
 endef
@@ -33,13 +62,17 @@ UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
 	HOSTCFLAGS="$(HOST_CFLAGS)" \
 	STRIP=$(TARGET_STRIP)
 
+ifeq ($(BR2_STATIC_BINARIES),y)
+UBOOT_TOOLS_MAKE_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -static"
+endif
+
 ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),y)
-UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y CONFIG_MKIMAGE_DTC_PATH=dtc
+UBOOT_TOOLS_MAKE_OPTS += CONFIG_MKIMAGE_DTC_PATH=dtc
 UBOOT_TOOLS_DEPENDENCIES += dtc
 endif
 
 ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
-UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
+UBOOT_TOOLS_MAKE_OPTS += CONFIG_TOOLS_LIBCRYPTO=y
 UBOOT_TOOLS_DEPENDENCIES += openssl host-pkgconf
 endif
 

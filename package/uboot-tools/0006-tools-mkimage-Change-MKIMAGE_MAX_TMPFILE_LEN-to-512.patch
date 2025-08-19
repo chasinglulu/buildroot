@@ -1,0 +1,25 @@
+From 685565fa78e53b81b1a1dc8c3e0627bde5545cde Mon Sep 17 00:00:00 2001
+From: chasinglulu <wangkartx@gmail.com>
+Date: Thu, 10 Jul 2025 22:43:32 +0800
+Subject: [PATCH] tools: mkimage: Change MKIMAGE_MAX_TMPFILE_LEN to 512
+
+---
+ tools/mkimage.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/mkimage.h b/tools/mkimage.h
+index f5ca65e2edf..86d34eaf19b 100644
+--- a/tools/mkimage.h
++++ b/tools/mkimage.h
+@@ -44,7 +44,7 @@ static inline ulong map_to_sysmem(void *ptr)
+ #define ALLOC_CACHE_ALIGN_BUFFER(type, name, size) type name[size]
+ 
+ #define MKIMAGE_TMPFILE_SUFFIX		".tmp"
+-#define MKIMAGE_MAX_TMPFILE_LEN		256
++#define MKIMAGE_MAX_TMPFILE_LEN		512
+ #define MKIMAGE_DEFAULT_DTC_OPTIONS	"-I dts -O dtb -p 500"
+ #define MKIMAGE_MAX_DTC_CMDLINE_LEN	2 * MKIMAGE_MAX_TMPFILE_LEN + 35
+ 
+-- 
+2.25.1
+

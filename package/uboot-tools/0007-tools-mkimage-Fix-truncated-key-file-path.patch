@@ -1,0 +1,25 @@
+From e254de73ac6cbd9eefc961bbf37cc014b52dfe2c Mon Sep 17 00:00:00 2001
+From: chasinglulu <wangkartx@gmail.com>
+Date: Thu, 24 Jul 2025 16:10:05 +0800
+Subject: [PATCH] tools: mkimage: Fix truncated key file path
+
+---
+ tools/image-host.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/image-host.c b/tools/image-host.c
+index ea62be4dd60..1a0959263fd 100644
+--- a/tools/image-host.c
++++ b/tools/image-host.c
+@@ -374,7 +374,7 @@ static int fit_image_setup_cipher(struct image_cipher_info *info,
+ 	char *algo_name;
+ 	const void *iv;
+ 	int ivlen;
+-	char filename[128];
++	char filename[1024];
+ 	int ret = -1;
+ 
+ 	if (fit_image_cipher_get_algo(fit, noffset, &algo_name)) {
+-- 
+2.25.1
+
