@@ -32,6 +32,14 @@ endef
 HOST_ANDROID_TOOLS_PRE_PATCH_HOOKS += ANDROID_TOOLS_DEBIAN_PATCH
 ANDROID_TOOLS_PRE_PATCH_HOOKS += ANDROID_TOOLS_DEBIAN_PATCH
 
+ifeq ($(BR2_STATIC_BINARIES),y)
+define ANDROID_TOOLS_STATIC_PATCH
+	$(APPLY_PATCHES) $(@D) $(ANDROID_TOOLS_PKGDIR)/static \*
+endef
+
+ANDROID_TOOLS_POST_PATCH_HOOKS += ANDROID_TOOLS_STATIC_PATCH
+endif
+
 ifeq ($(BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT),y)
 HOST_ANDROID_TOOLS_BUILD_TARGETS += fastboot
 HOST_ANDROID_TOOLS_INSTALL_TARGETS += build-fastboot/fastboot
@@ -53,17 +61,27 @@ endif
 
 ifeq ($(BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT),y)
 ANDROID_TOOLS_TARGETS += fastboot
+ANDROID_TOOLS_INSTALL_TARGETS += build-fastboot/fastboot
 ANDROID_TOOLS_DEPENDENCIES += zlib libselinux
 endif
 
 ifeq ($(BR2_PACKAGE_ANDROID_TOOLS_ADB),y)
 ANDROID_TOOLS_TARGETS += adb
+ANDROID_TOOLS_INSTALL_TARGETS += build-adb/adb
 ANDROID_TOOLS_DEPENDENCIES += zlib openssl
 endif
 
 ifeq ($(BR2_PACKAGE_ANDROID_TOOLS_ADBD),y)
 ANDROID_TOOLS_TARGETS += adbd
+ANDROID_TOOLS_INSTALL_TARGETS += build-adbd/adbd
 ANDROID_TOOLS_DEPENDENCIES += zlib openssl
+endif
+
+ifeq ($(BR2_PACKAGE_ANDROID_TOOLS_EXT4_UTILS),y)
+ANDROID_TOOLS_TARGETS += ext4_utils
+ANDROID_TOOLS_INSTALL_TARGETS += \
+	$(addprefix build-ext4_utils/,make_ext4fs ext4fixup ext2simg img2simg simg2img simg2simg)
+ANDROID_TOOLS_DEPENDENCIES += libselinux
 endif
 
 # Build each tool in its own directory not to share object files
@@ -88,8 +106,8 @@ define HOST_ANDROID_TOOLS_INSTALL_CMDS
 endef
 
 define ANDROID_TOOLS_INSTALL_TARGET_CMDS
-	$(foreach t,$(ANDROID_TOOLS_TARGETS),\
-		$(INSTALL) -D -m 0755 $(@D)/build-$(t)/$(t) $(TARGET_DIR)/usr/bin/$(t)$(sep))
+	$(foreach t,$(ANDROID_TOOLS_INSTALL_TARGETS),\
+		$(INSTALL) -D -m 0755 $(@D)/$(t) $(TARGET_DIR)/usr/bin/$(sep))
 endef
 
 $(eval $(generic-package))

@@ -1,0 +1,29 @@
+From b9e96694426b4876b92ff17491212d54938ee2f1 Mon Sep 17 00:00:00 2001
+From: chasinglulu <wangkartx@gmail.com>
+Date: Tue, 19 Aug 2025 10:50:31 +0800
+Subject: [PATCH] compile ext4_utils as static
+
+---
+ makefiles/ext4_utils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/makefiles/ext4_utils.mk b/makefiles/ext4_utils.mk
+index cb64916..b9565e2 100644
+--- a/debian/makefiles/ext4_utils.mk
++++ b/debian/makefiles/ext4_utils.mk
+@@ -43,10 +43,10 @@ OBJS= $(SRCS:.c=.o)
+ all: make_ext4fs ext4fixup ext2simg img2simg simg2img simg2simg
+ 
+ make_ext4fs ext4fixup: $(OBJS)
+-	$(CC) -o $@ $(LDFLAGS) $(OBJS_SHARED) $@_main.o $(LIBS)
++	$(CC) -static -o $@ $(LDFLAGS) $(OBJS_SHARED) $@_main.o $(LIBS) -lpcre2-8
+ 
+ ext2simg img2simg simg2img simg2simg: $(OBJS)
+-	$(CC) -o $@ $(LDFLAGS) $(OBJS_SHARED) $@.o $(LIBS)
++	$(CC) -static -o $@ $(LDFLAGS) $(OBJS_SHARED) $@.o $(LIBS) -lpcre2-8
+ 
+ clean:
+ 	rm -rf $(OBJS) ext2simg ext4fixup make_ext4fs img2simg simg2img simg2simg
+-- 
+2.25.1
+

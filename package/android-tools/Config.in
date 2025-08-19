@@ -75,6 +75,14 @@ config BR2_PACKAGE_ANDROID_TOOLS_ADBD
 	  target, which can be used to interact with a host machine
 	  implementing the ADB protocol.
 
+config BR2_PACKAGE_ANDROID_TOOLS_EXT4_UTILS
+	bool "ext4 utils"
+	depends on BR2_PACKAGE_LIBSELINUX
+	help
+	  This option will build and install the ext4 utils for the
+	  host, i.e. make_ext4fs, ext4fixup, ext2simg, img2simg,
+	  simg2img and simg2simg.
+
 endif
 
 comment "android-tools needs a toolchain w/ threads"
