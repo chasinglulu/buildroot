@@ -31,5 +31,10 @@ endif
 # needed for qt6base
 HOST_PCRE2_CONF_OPTS = --enable-pcre2-16
 
+ifeq ($(BR2_STATIC_BINARIES),y)
+PCRE2_CONF_OPTS += --enable-static
+HOST_PCRE2_CONF_OPTS += --enable-static
+endif
+
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))
