@@ -15,6 +15,10 @@ MTD_INSTALL_STAGING = YES
 
 MTD_LDFLAGS = $(TARGET_LDFLAGS)
 
+ifeq ($(BR2_STATIC_BINARIES),y)
+MTD_LDFLAGS += -static
+endif
+
 ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
 MTD_DEPENDENCIES += libexecinfo
 MTD_LDFLAGS += -lexecinfo
@@ -59,6 +63,10 @@ ifeq ($(BR2_PACKAGE_MTD_TESTS),y)
 MTD_CONF_OPTS += --enable-tests
 else
 MTD_CONF_OPTS += --disable-tests
+endif
+
+ifeq ($(BR2_STATIC_BINARIES),y)
+MTD_CONF_OPTS += -enable-static
 endif
 
 # If extended attributes are required, the acl package must
