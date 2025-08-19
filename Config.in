@@ -670,6 +670,12 @@ config BR2_SHARED_STATIC_LIBS
 
 endchoice
 
+config BR2_STATIC_BINARIES
+	bool "Build all target binaries as static"
+	depends on BR2_SHARED_STATIC_LIBS
+	help
+	  If enabled, all target binaries will be built as static executables.
+
 config BR2_PACKAGE_OVERRIDE_FILE
 	string "location of a package override file"
 	default "$(CONFIG_DIR)/local.mk"
