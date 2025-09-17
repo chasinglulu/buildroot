@@ -1,0 +1,37 @@
+From e055a29f99d2ef881be96fe031ed7c9328be2129 Mon Sep 17 00:00:00 2001
+From: chasinglulu <wangkartx@gmail.com>
+Date: Wed, 17 Sep 2025 15:39:20 +0800
+Subject: [PATCH] tools: mkimage: Add axgzip compression type
+
+---
+ boot/image.c    | 1 +
+ include/image.h | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/boot/image.c b/boot/image.c
+index a0d0cc24..58c288d2 100644
+--- a/boot/image.c
++++ b/boot/image.c
+@@ -187,6 +187,7 @@ static const table_entry_t uimage_comp[] = {
+ 	{	IH_COMP_NONE,	"none",		"uncompressed",		},
+ 	{	IH_COMP_BZIP2,	"bzip2",	"bzip2 compressed",	},
+ 	{	IH_COMP_GZIP,	"gzip",		"gzip compressed",	},
++	{	IH_COMP_AXGZIP,	"axgzip",	"axgzip compressed",	},
+ 	{	IH_COMP_LZMA,	"lzma",		"lzma compressed",	},
+ 	{	IH_COMP_LZO,	"lzo",		"lzo compressed",	},
+ 	{	IH_COMP_LZ4,	"lz4",		"lz4 compressed",	},
+diff --git a/include/image.h b/include/image.h
+index d7d756c6..dc025199 100644
+--- a/include/image.h
++++ b/include/image.h
+@@ -243,6 +243,7 @@ enum {
+ enum {
+ 	IH_COMP_NONE		= 0,	/*  No	 Compression Used	*/
+ 	IH_COMP_GZIP,			/* gzip	 Compression Used	*/
++	IH_COMP_AXGZIP,			/* axgzip Compression Used	*/
+ 	IH_COMP_BZIP2,			/* bzip2 Compression Used	*/
+ 	IH_COMP_LZMA,			/* lzma  Compression Used	*/
+ 	IH_COMP_LZO,			/* lzo   Compression Used	*/
+-- 
+2.25.1
+
