@@ -1,0 +1,27 @@
+From 1628fe229bbf219d9269641b2d37400d7ed5316b Mon Sep 17 00:00:00 2001
+From: chasinglulu <wangkartx@gmail.com>
+Date: Mon, 25 Aug 2025 19:46:24 +0800
+Subject: [PATCH] Fix static build problem
+
+---
+ elf/dl-call-libc-early-init.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/elf/dl-call-libc-early-init.c b/elf/dl-call-libc-early-init.c
+index 144a7442..f9a118b0 100644
+--- a/elf/dl-call-libc-early-init.c
++++ b/elf/dl-call-libc-early-init.c
+@@ -34,7 +34,9 @@ _dl_call_libc_early_init (struct link_map *libc_map, _Bool initial)
+                          0x069682ac, /* dl_new_hash output.  */
+                          "GLIBC_PRIVATE",
+                          0x0963cf85); /* _dl_elf_hash output.  */
+-  assert (sym != NULL);
++  if (sym == NULL)
++    return;
++
+   __typeof (__libc_early_init) *early_init
+     = DL_SYMBOL_ADDRESS (libc_map, sym);
+   early_init (initial);
+-- 
+2.25.1
+
